@@ -32,7 +32,7 @@ class OllamaRunner(AbstractLLMRunner):
         parsed_results = []
         
         print(f"Ai is thinking...")
-        # todo: add async code to make it run faster
+        # todo: add async code to make it run faster 
         for i, chunk in enumerate(content_chunks, start=1):
             response = chain.invoke({
                 "question": question,
