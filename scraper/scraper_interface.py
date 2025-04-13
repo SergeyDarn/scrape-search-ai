@@ -1,3 +1,8 @@
 class ScraperInterface:
-    def scrape(website: str) -> str:
+    def scrape_single_page(
+        self,
+        website: str,
+        auth_cookie_name: str = "",
+        auth_cookie_value: str = ""
+    ) -> str:
         pass

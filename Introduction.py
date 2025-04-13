@@ -7,4 +7,4 @@ st.set_page_config(
 
 st.title('Хеллоу')
 
-# ToDo: добавить сюда FAQ
+# ToDo: добавить сюда FAQ / интродакшн + в readme тоже

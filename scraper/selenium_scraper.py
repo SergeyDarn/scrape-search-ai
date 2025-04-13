@@ -2,14 +2,19 @@ import selenium.webdriver as webdriver
 from selenium.webdriver.chrome.service import Service
 
 from scraper.scraper_interface import ScraperInterface
+from scraper.string_utils import StringUtils
 
 
 class SeleniumScraper(ScraperInterface):
-    def scrape(self, website: str) -> str:
-        print("Launching Chrome browser...")
-
+    def scrape_single_page(
+        self,
+        url: str,
+        auth_cookie_name: str = "",
+        auth_cookie_value: str = ""
+    ) -> str:
         # todo: как-то универсализировать установку драйвера
         # todo: добавить инструкцию для мака по разрешению на то, чтобы запустить этот скрипт в security (или если это будет запускать в докере - таких проблем не должно быть)
+        # todo: сделать чтобы скрейп происходил на фоне, без фокуса на окне браузера
         # drivers download: https://googlechromelabs.github.io/chrome-for-testing/#stable
         chrome_driver_path = "./chromedriver"
         options = webdriver.ChromeOptions()
@@ -19,8 +24,20 @@ class SeleniumScraper(ScraperInterface):
         )
         
         try:
-            driver.get(website)
-            print("Page Loaded")
+            driver.get(url)
+            
+            if (auth_cookie_name and auth_cookie_value):
+                if (driver.get_cookie(auth_cookie_name)):
+                    driver.delete_cookie(auth_cookie_name)
+
+                driver.add_cookie({
+                    "name": auth_cookie_name,
+                    "value": auth_cookie_value,
+                    "domain": "." + StringUtils.get_domain(url),
+                    "path": "/admin"
+                })
+                
+                driver.get(url)
             
             html = driver.page_source
             
