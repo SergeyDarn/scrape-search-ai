@@ -14,10 +14,11 @@ class SeleniumScraper(ScraperInterface):
     ) -> str:
         # todo: как-то универсализировать установку драйвера
         # todo: добавить инструкцию для мака по разрешению на то, чтобы запустить этот скрипт в security (или если это будет запускать в докере - таких проблем не должно быть)
-        # todo: сделать чтобы скрейп происходил на фоне, без фокуса на окне браузера
         # drivers download: https://googlechromelabs.github.io/chrome-for-testing/#stable
         chrome_driver_path = "./chromedriver"
         options = webdriver.ChromeOptions()
+        options.add_argument("--headless")
+
         driver = webdriver.Chrome(
             service=Service(chrome_driver_path),
             options=options
