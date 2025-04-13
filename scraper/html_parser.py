@@ -8,6 +8,12 @@ class HtmlParser:
 
         return self.clean_html(body)
     
+    def get_title(self, html: str) -> str:
+        html_soup = BeautifulSoup(html, "html.parser")
+        title_tag = html_soup.find("title")
+        
+        return title_tag.string if title_tag else ""
+        
 
     def get_links(self, html: str, main_link: str, url_to_include: str) -> str:
         html_soup = BeautifulSoup(html, "html.parser")
@@ -15,8 +21,8 @@ class HtmlParser:
 
         for link_tag in html_soup.find_all('a'):
             href = link_tag.get('href')
-
-            if (not url_to_include or (href.find(url_to_include) != -1)):
+            
+            if (not url_to_include or (href and href.find(url_to_include) != -1)):
                 links.append(href)
                 
         links = self._process_links(main_link, links)
@@ -57,10 +63,9 @@ class HtmlParser:
         mapped_urls = []
         main_base_url = StringUtils.get_base_url(main_url)
 
-        print('main_base_url', main_base_url)
-
         for url in urls:
             url = main_base_url + StringUtils.get_relative_url(url)
+            url = url.strip()
             
             try:
                 mapped_urls.index(url)

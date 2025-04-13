@@ -11,3 +11,15 @@ class ArrayUtils:
                 
         return res
     
+    # todo: add typing
+    def filter_array(array_to_filter, values_to_exclude):
+        filtered_array = []
+        
+        for item in array_to_filter:
+            try:
+                values_to_exclude.index(item)
+            except:
+                filtered_array.append(item)
+                
+        return filtered_array
+    

@@ -1,7 +1,7 @@
 from typing import List
 
 class AbstractLLMRunner:
-    SAFE_CONENT_CHUNK_SIZE = 6000
+    SAFE_CONTENT_CHUNK_SIZE = 6000
     
     def __init__(self):
         pass
@@ -11,10 +11,15 @@ class AbstractLLMRunner:
     
     def split_content_into_chunks(
         self,
-        content: str,
-        max_length: int = SAFE_CONENT_CHUNK_SIZE
+        content: List[str],
+        chunk_size: int = SAFE_CONTENT_CHUNK_SIZE
     ) -> List[str]:
-        return [
-            # todo: figure out how this works
-            content[i: i + max_length] for i in range(0, len(content), max_length)
-        ]
+        chunks = [];
+        
+        for chunk in content:
+            split_chunks = [
+                chunk[i: i + chunk_size] for i in range(0, len(chunk), chunk_size)
+            ]
+            chunks += split_chunks
+            
+        return chunks

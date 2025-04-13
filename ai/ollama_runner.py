@@ -1,10 +1,16 @@
 from ai.abstract_llm_runner import AbstractLLMRunner
 from langchain_ollama import OllamaLLM
 from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.runnables import RunnableParallel
 
+from multiprocessing import Pool
+from functools import partial
+from typing import List
+import time
 
 class OllamaRunner(AbstractLLMRunner):
-    DEFAULT_MODEL = "llama3.2"
+    # todo: move default olama model to .env config
+    DEFAULT_MODEL = "llama3" # llama3.2 - smaller model, llama3 - more accurate and demanding
     DEFAUL_MODEL_INSTRUCTIONS = (
         "You are tasked with extracting specific information from the following text content: {content}."
         "Please follow these instructions carefully: \n\n"
@@ -21,24 +27,28 @@ class OllamaRunner(AbstractLLMRunner):
     ):
         self.model = OllamaLLM(model=model_name)
         self.model_instructions = model_instructions
-        # todo: delete this linesuper().__init__()
     
     
-    def ask_ai(self, question: str, content: str) -> str:
-        prompt = ChatPromptTemplate.from_template(self.model_instructions)
+    def ask_ai(self, question: str, context: List[str]) -> str:
+        prompt = ChatPromptTemplate.from_template(self.model_instructions) 
         chain = prompt | self.model
         
-        content_chunks = self.split_content_into_chunks(content)
+        content_chunks = self.split_content_into_chunks(context)
+        time1 = time.perf_counter()
+        
+        print(f"Ai is thinking: {question}")
+        
         parsed_results = []
         
-        print(f"Ai is thinking...")
-        # todo: add async code to make it run faster 
         for i, chunk in enumerate(content_chunks, start=1):
             response = chain.invoke({
                 "question": question,
                 "content": chunk
             })
-            print(f"Ai parsed batch {i} of {len(content_chunks)}")
+            percentage = int(i / len(content_chunks) * 100)
+            print(f"Ai is thinking... {percentage}% (batch {i}/{len(content_chunks)})")
             parsed_results.append(response)
+            
+        print(f"Querying finished in {time.perf_counter() - time1}")
             
         return "\n".join(parsed_results)

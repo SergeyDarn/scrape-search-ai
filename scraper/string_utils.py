@@ -17,6 +17,7 @@ class StringUtils:
         
         return url
     
+    # todo: refactor to lstrip and rstrip
     @staticmethod
     def remove_forward_slash(url: str) -> str:
         return re.sub("^\/", "", url)
@@ -27,7 +28,7 @@ class StringUtils:
     
     @staticmethod
     def remove_get_parameters_and_hash(url: str) -> str:
-        return re.sub("[?#].*$", "", url)
+        return re.sub("[?#][^\/]*$", "", url)
     
     @staticmethod
     def get_domain(url: str) -> str:
