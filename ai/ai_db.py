@@ -1,5 +1,4 @@
 from ai.chroma import Chroma
-from langchain_core.documents import Document
 
 # todo: separate db and llm runners into separate folders (add subfolders)
 class AiDb:
