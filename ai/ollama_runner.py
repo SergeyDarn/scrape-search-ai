@@ -34,10 +34,10 @@ class OllamaRunner(AbstractLLMRunner):
         chain = prompt | self.model
         
         content_chunks = self.split_content_into_chunks(context)
+
         time1 = time.perf_counter()
-        
         print(f"Ai is thinking: {question}")
-        
+
         parsed_results = []
         
         for i, chunk in enumerate(content_chunks, start=1):
@@ -45,9 +45,10 @@ class OllamaRunner(AbstractLLMRunner):
                 "question": question,
                 "content": chunk
             })
+            parsed_results.append(response)
+
             percentage = int(i / len(content_chunks) * 100)
             print(f"Ai is thinking... {percentage}% (batch {i}/{len(content_chunks)})")
-            parsed_results.append(response)
             
         print(f"Querying finished in {time.perf_counter() - time1}")
             

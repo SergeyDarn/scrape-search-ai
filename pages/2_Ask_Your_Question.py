@@ -13,11 +13,13 @@ st.set_page_config(
 st.title("Задай свой вопрос")
 collection = st.text_input("Имя коллекции")
 
+# todo: move this inside if
 question = st.text_input("Вопрос")
 ai_db = AiDb()
 
 if (st.button("Спросить")):
     query_res = ai_db.query_collection(collection, question, 5)
+    # todo: handle empty documents
     res = ask_ai(question, query_res["documents"][0])
     
     # todo later: pass url metadata to ai too
