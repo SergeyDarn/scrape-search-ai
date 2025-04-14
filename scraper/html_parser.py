@@ -10,9 +10,8 @@ class HtmlParser:
     
     def get_title(self, html: str) -> str:
         html_soup = BeautifulSoup(html, "html.parser")
-        title_tag = html_soup.find("title")
         
-        return title_tag.string if title_tag else ""
+        return html_soup.title.name if html_soup.itlte else ""
         
 
     def get_links(self, html: str, main_link: str, url_to_include: str) -> str:
@@ -49,8 +48,8 @@ class HtmlParser:
         
         for script_or_style in html_soup([ "script", "style" ]):
             script_or_style.extract()
-            
-        return html_soup.get_text(separator="\n")
+
+        return html_soup.get_text()
 
 
     def _remove_empty_lines(self, html: str) -> str:
