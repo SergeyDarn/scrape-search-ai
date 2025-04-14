@@ -11,21 +11,11 @@ class StringUtils:
     def get_relative_url(url: str) -> str:
         base_url = StringUtils.get_base_url(url)
         
-        url = url.replace(base_url, '')
-        url = StringUtils.remove_forward_slash(url)
+        url = url.replace(base_url, '').lstrip('/')
         url = StringUtils.remove_get_parameters_and_hash(url)
         
         return url
-    
-    # todo: refactor to lstrip and rstrip
-    @staticmethod
-    def remove_forward_slash(url: str) -> str:
-        return re.sub("^\/", "", url)
-    
-    @staticmethod
-    def remove_backwards_slash(url: str) -> str:
-        return re.sub("\/$", "", url)
-    
+
     @staticmethod
     def remove_get_parameters_and_hash(url: str) -> str:
         return re.sub("[?#][^\/]*$", "", url)
@@ -35,4 +25,4 @@ class StringUtils:
         base_url = StringUtils.get_base_url(url)
         domain = re.sub("https?:\/\/", "", base_url)
 
-        return StringUtils.remove_backwards_slash(domain)
+        return domain.rstrip('/')

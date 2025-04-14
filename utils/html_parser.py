@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 from typing import List
-from scraper.string_utils import StringUtils
+from utils.string_utils import StringUtils
 
 class HtmlParser:
     def parse(self, html: str) -> str:
@@ -9,13 +9,13 @@ class HtmlParser:
         return self.clean_html(body)
     
     def get_title(self, html: str) -> str:
-        html_soup = BeautifulSoup(html, "html.parser")
+        html_soup = self._parse_html(html)
         
         return html_soup.title.name if html_soup.itlte else ""
         
 
     def get_links(self, html: str, main_link: str, url_to_include: str) -> str:
-        html_soup = BeautifulSoup(html, "html.parser")
+        html_soup = self._parse_html(html)
         links = []
 
         for link_tag in html_soup.find_all('a'):
@@ -29,9 +29,8 @@ class HtmlParser:
         return links
         
 
-    # Todo: add return type
-    def get_body(self, html: str):
-        soup = BeautifulSoup(html, "html.parser")
+    def get_body(self, html: str) -> str:
+        soup = self._parse_html(html)
         body = str(soup.body) if soup.body else ""
         
         return body
@@ -44,7 +43,7 @@ class HtmlParser:
 
 
     def _remove_scripts_and_styles(self, html: str) -> str:
-        html_soup = BeautifulSoup(html, "html.parser")
+        html_soup = self._parse_html(html)
         
         for script_or_style in html_soup([ "script", "style" ]):
             script_or_style.extract()
@@ -53,7 +52,6 @@ class HtmlParser:
 
 
     def _remove_empty_lines(self, html: str) -> str:
-        # todo: figure out how this works
         return "\n".join(
             line.strip() for line in html.splitlines() if line.strip()
         )
@@ -73,6 +71,9 @@ class HtmlParser:
                 pass
 
         return mapped_urls
+    
+    def _parse_html(self, html: str) -> BeautifulSoup:
+        return BeautifulSoup(html, "html.parser")
             
         
     

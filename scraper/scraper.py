@@ -1,6 +1,6 @@
 from scraper.selenium_scraper import SeleniumScraper
-from scraper.html_parser import HtmlParser
-from scraper.array_utils import ArrayUtils
+from utils.html_parser import HtmlParser
+from utils.array_utils import ArrayUtils
 
 from typing import List
 import math
@@ -33,34 +33,10 @@ class Scraper:
     def scrape_website(self, url_limit: int = math.inf) -> List[str]:
         time1 = time.perf_counter()
         
-        scrape_res = self.scrape_single_page(self.main_url, True)
+        scraped_main_page = self.scrape_single_page(self.main_url, True)
+        main_page_object = self._build_content_object(self.main_url, scraped_main_page["title"], scraped_main_page["content"])
 
-        page_links = scrape_res["urls"]
-        scraped_urls = [self.main_url]
-        scraped_content = [
-            self._build_content_object(self.main_url, scrape_res["title"], scrape_res["content"])
-        ]
-        url_counter = 1
-
-        # todo: move to another function
-        while ((len(page_links) > 0) and (url_counter < url_limit)):
-            link = page_links[-1].strip()
-            
-            try:
-                scraped_urls.index(link)
-            except:
-                res = self.scrape_single_page(link, True)
-                scraped_urls.append(link)
-                filtered_res_urls = ArrayUtils.filter_array(res["urls"], scraped_urls)
-                page_links = ArrayUtils.combine_arrays(page_links, filtered_res_urls)
-                
-                if res["content"]:
-                    scraped_content.append(
-                        self._build_content_object(link, res["title"], res["content"])
-                    )
-
-            page_links.pop(-1)
-            url_counter += 1
+        scraped_pages = self._scrape_website_pages(scraped_main_page["urls"], url_limit)
         
         #print('website_content', website_content)
         print("-----------------------------")
@@ -69,7 +45,7 @@ class Scraper:
         print("-----------------------------")
         print("-----------------------------")
 
-        return scraped_content
+        return [main_page_object] + scraped_pages
 
 
     # todo: add correct return type
@@ -94,6 +70,39 @@ class Scraper:
             "content": website_content,
             "urls": page_links
         }
+
+
+    def _scrape_website_pages(
+        self,
+        page_links: List[str],
+        url_limit: int = math.inf
+    ):
+        page_urls = page_links.copy()
+        scraped_urls = [self.main_url]
+        scraped_content = []
+        url_counter = 1
+        
+        while ((len(page_urls) > 0) and (url_counter < url_limit)):
+            page_url = page_urls[-1].strip()
+            
+            try:
+                scraped_urls.index(page_url)
+            except:
+                scraped_urls.append(page_url)
+
+                scraped_page = self.scrape_single_page(page_url, True)
+                filtered_res_urls = ArrayUtils.filter_array(scraped_page["urls"], scraped_urls)
+                page_urls = ArrayUtils.combine_arrays(page_urls, filtered_res_urls)
+                
+                if scraped_page["content"]:
+                    content_object = self._build_content_object(page_url, scraped_page["title"], scraped_page["content"])
+                    scraped_content.append(content_object)
+
+            page_urls.pop(-1)
+            url_counter += 1
+            
+        return scraped_content
+        
 
     # todo: type properly
     def _build_content_object(self, url: str, title: str, content: str): 

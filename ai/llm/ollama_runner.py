@@ -1,4 +1,4 @@
-from ai.abstract_llm_runner import AbstractLLMRunner
+from ai.llm.abstract_llm_runner import AbstractLLMRunner
 from langchain_ollama import OllamaLLM
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnableParallel

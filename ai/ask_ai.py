@@ -1,7 +1,8 @@
-from ai.ollama_runner import OllamaRunner
+from ai.llm.ollama_runner import OllamaRunner
 from typing import List
 # todo - figure out how to install Ollama for user
 
+# todo: ? move inside function
 llm_runner = OllamaRunner()
 
 def ask_ai(question: str, context: List[str]) -> str:

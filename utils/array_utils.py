@@ -1,6 +1,8 @@
+from typing import List
+
 class ArrayUtils:
-    # todo: add typing
-    def combine_arrays(array1, array2):
+    @staticmethod
+    def combine_arrays[T](array1: List[T], array2: List[T]):
         res = array1
         
         for item in array2:
@@ -10,9 +12,9 @@ class ArrayUtils:
                 res.append(item)
                 
         return res
-    
-    # todo: add typing
-    def filter_array(array_to_filter, values_to_exclude):
+
+    @staticmethod
+    def filter_array[T](array_to_filter: List[T], values_to_exclude: List[T]):
         filtered_array = []
         
         for item in array_to_filter:

@@ -1,6 +1,6 @@
 import chromadb
 
-from ai.ai_db_interface import AiDbInterface
+from ai.db.ai_db_interface import AiDbInterface
 
 class Chroma(AiDbInterface):
     DEFAULT_RESULTS_QTY = 10

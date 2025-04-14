@@ -1,12 +1,11 @@
-from ai.chroma import Chroma
+from ai.db.chroma import Chroma
 
-# todo: separate db and llm runners into separate folders (add subfolders)
 class AiDb:
     def __init__(self):
         self.db = Chroma()
 
     # todo: type properly, and maybe move this logic to Chroma class?
-    def add_documents(self, site_name, content_array):
+    def add_documents(self, site_name: str, content_array):
         documents = []
         metadatas = []
         ids = []

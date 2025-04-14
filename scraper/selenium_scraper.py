@@ -2,7 +2,7 @@ import selenium.webdriver as webdriver
 from selenium.webdriver.chrome.service import Service
 
 from scraper.scraper_interface import ScraperInterface
-from scraper.string_utils import StringUtils
+from utils.string_utils import StringUtils
 
 
 class SeleniumScraper(ScraperInterface):

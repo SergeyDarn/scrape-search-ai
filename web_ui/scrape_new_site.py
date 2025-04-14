@@ -3,8 +3,9 @@ import streamlit as st
 WEBSITE_CONTENT_KEY = "WEBSITE_CONTENT"
 
 from scraper.scraper import Scraper
-from ai.ai_db import AiDb
+from ai.db.ai_db import AiDb
 
+# todo: move classes init inside a function
 scraper = Scraper()
 aiDb = AiDb()
 
@@ -34,10 +35,8 @@ def scrape_new_site():
         # st.session_state[WEBSITE_CONTENT_KEY] = res["content"]
         
         #with st.expander("View DOM Content"):
-         #   st.text_area("DOM Content", website_content, 300)
-            
-    # todo: add logic to save website scraping data to ai_db
-            
+        #   st.text_area("DOM Content", scraped_content[0]["content"], 300)
+
     #if (WEBSITE_CONTENT_KEY in st.session_state):           
     #    question = st.text_area("What do you want to ask?")
             
