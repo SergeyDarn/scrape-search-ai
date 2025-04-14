@@ -54,8 +54,6 @@ class Scraper:
                 filtered_res_urls = ArrayUtils.filter_array(res["urls"], scraped_urls)
                 page_links = ArrayUtils.combine_arrays(page_links, filtered_res_urls)
                 
-                print("page_links", page_links)
-
                 if res["content"]:
                     scraped_content.append(
                         self._build_content_object(link, res["title"], res["content"])
