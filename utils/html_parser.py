@@ -48,7 +48,7 @@ class HtmlParser:
         for script_or_style in html_soup([ "script", "style" ]):
             script_or_style.extract()
 
-        return html_soup.get_text()
+        return html_soup.get_text(" ")
 
 
     def _remove_empty_lines(self, html: str) -> str:
@@ -64,11 +64,8 @@ class HtmlParser:
             url = main_base_url + StringUtils.get_relative_url(url)
             url = url.strip()
             
-            try:
-                mapped_urls.index(url)
-            except:
+            if (url not in mapped_urls):
                 mapped_urls.append(url)
-                pass
 
         return mapped_urls
     
